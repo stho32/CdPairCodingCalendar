@@ -10,6 +10,11 @@ const pairCodingSessions = [
         fromTime: "2024-12-08T16:00:00Z",  // Sunday 16:00 GMT
         toTime: "2024-12-08T18:00:00Z"     // Sunday 18:00 GMT
     },
+    {
+        host: "Steven Borrie",
+        fromTime: "2024-12-08T09:30:00Z",  // Sunday 09:30 GMT
+        toTime: "2024-12-08T10:30:00Z"     // Sunday 10:30 GMT
+    },
     // Add more sessions as needed
 ];
 

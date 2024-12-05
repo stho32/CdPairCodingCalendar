@@ -27,6 +27,20 @@ header {
     align-items: center;
 }
 
+.info-text {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #90caf9;
+}
+
+.info-text p {
+    margin: 0;
+    line-height: 1.5;
+    color: #555;
+}
+
 h1 {
     color: #333;
 }
@@ -81,7 +95,7 @@ select {
 }
 
 .hour-slot {
-    height: 60px;
+    height: 30px;
     border-bottom: 1px solid #eee;
     padding: 5px;
     font-size: 0.9em;
@@ -89,7 +103,7 @@ select {
 }
 
 .quarter-hour {
-    height: 15px;
+    height: 7.5px;
     border-bottom: 1px dotted #eee;
 }
 
