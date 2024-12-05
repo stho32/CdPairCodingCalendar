@@ -92,6 +92,12 @@ select {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     position: relative;
+    height: 720px;  /* 24 hours * 30px per hour */
+}
+
+.day-column {
+    position: relative;
+    border-right: 1px solid #eee;
 }
 
 .hour-slot {
@@ -116,10 +122,23 @@ select {
     font-size: 0.85em;
     overflow: hidden;
     z-index: 1;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .session:hover {
     background-color: #bbdefb;
+}
+
+.session-details p {
+    margin-bottom: 0.5rem;
+}
+
+.session-details p:last-child {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+    font-style: italic;
 }
 
 .host-name {

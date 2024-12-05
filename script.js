@@ -97,6 +97,21 @@ function displaySessions() {
             </div>
         `;
 
+        // Create session details for modal
+        sessionElement.addEventListener('click', () => {
+            const modalBody = document.getElementById('sessionModalBody');
+            modalBody.innerHTML = `
+                <div class="session-details">
+                    <p><strong>Host:</strong> ${session.host}</p>
+                    <p><strong>Day:</strong> ${fromDateTime.toFormat('cccc')}</p>
+                    <p><strong>Time:</strong> ${fromDateTime.toFormat('HH:mm')} - ${toDateTime.toFormat('HH:mm')}</p>
+                    <p><strong>Note:</strong> This is a recurring availability. Please contact the host on Discord to arrange a specific date.</p>
+                </div>
+            `;
+            const modal = new bootstrap.Modal(document.getElementById('sessionModal'));
+            modal.show();
+        });
+
         // Position the session element
         sessionElement.style.left = `${(dayIndex / 7) * 100}%`;
         sessionElement.style.width = `${100/7}%`;
