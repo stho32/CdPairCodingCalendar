@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pair Programming Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.3/luxon.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pair Programming Calendar</h1>
+            <div class="timezone-selector">
+                <label for="timezone">Your Timezone:</label>
+                <select id="timezone"></select>
+            </div>
+        </header>
+        <div class="calendar">
+            <div class="time-column">
+                <div class="hour-header">Hour</div>
+                <div class="hours"></div>
+            </div>
+            <div class="days-container">
+                <div class="days-header">
+                    <div>Monday</div>
+                    <div>Tuesday</div>
+                    <div>Wednesday</div>
+                    <div>Thursday</div>
+                    <div>Friday</div>
+                    <div>Saturday</div>
+                    <div>Sunday</div>
+                </div>
+                <div class="slots-container"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
