@@ -29,18 +29,48 @@ const pairCodingSessions = [
 // Populate timezone dropdown
 function populateTimezones() {
     const select = document.getElementById('timezone');
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const userTimezone = luxon.DateTime.local().zoneName;
     
-    // Get all timezone names
+    // Get all timezone names using Intl API
     const timeZones = Intl.supportedValuesOf('timeZone');
     
-    timeZones.forEach(zone => {
-        const option = document.createElement('option');
-        option.value = zone;
-        option.text = zone;
-        option.selected = zone === userTimezone;
-        select.appendChild(option);
+    // Create timezone options with additional info
+    const options = timeZones.map(zone => {
+        const now = luxon.DateTime.now().setZone(zone);
+        const offset = now.toFormat('ZZ');
+        const label = `(GMT${offset}) ${zone.replace(/_/g, ' ')}`;
+        
+        return {
+            id: zone,
+            text: label,
+            selected: zone === userTimezone
+        };
     });
+
+    // Sort options by offset and name
+    options.sort((a, b) => {
+        const offsetA = a.text.substring(4, 10);
+        const offsetB = b.text.substring(4, 10);
+        if (offsetA === offsetB) {
+            return a.text.localeCompare(b.text);
+        }
+        return offsetA.localeCompare(offsetB);
+    });
+
+    // Initialize Select2
+    $(select).select2({
+        theme: 'bootstrap-5',
+        data: options,
+        width: '100%',
+        placeholder: 'Search for your timezone...',
+        allowClear: false
+    });
+
+    // Set default value
+    const defaultOption = options.find(opt => opt.selected);
+    if (defaultOption) {
+        $(select).val(defaultOption.id).trigger('change');
+    }
 }
 
 // Get the next occurrence of a given weekday
@@ -133,7 +163,9 @@ function initCalendar() {
     displaySessions();
     
     // Add event listener for timezone changes
-    document.getElementById('timezone').addEventListener('change', displaySessions);
+    $('#timezone').on('select2:select', function (e) {
+        displaySessions();
+    });
 }
 
 // Start the application
