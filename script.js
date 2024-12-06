@@ -1,24 +1,30 @@
-// Sample pair coding sessions (times in GMT+0)
+// Sample pair coding sessions
 const pairCodingSessions = [
     {
         host: "Stefan H.",
-        fromTime: "2024-12-07T16:00:00Z",  // Saturday 16:00 GMT
-        toTime: "2024-12-07T18:00:00Z"     // Saturday 18:00 GMT
+        weekday: 6, // Saturday
+        startHour: 16,
+        startMinute: 0,
+        endHour: 18,
+        endMinute: 0
     },
     {
         host: "Stefan H.",
-        fromTime: "2024-12-08T16:00:00Z",  // Sunday 16:00 GMT
-        toTime: "2024-12-08T18:00:00Z"     // Sunday 18:00 GMT
+        weekday: 7, // Sunday
+        startHour: 16,
+        startMinute: 0,
+        endHour: 18,
+        endMinute: 0
     },
     {
         host: "Steven Borrie",
-        fromTime: "2024-12-08T09:30:00Z",  // Sunday 09:30 GMT
-        toTime: "2024-12-08T10:30:00Z"     // Sunday 10:30 GMT
-    },
-    // Add more sessions as needed
+        weekday: 7, // Sunday
+        startHour: 9,
+        startMinute: 30,
+        endHour: 10,
+        endMinute: 30
+    }
 ];
-
-const DateTime = luxon.DateTime;
 
 // Populate timezone dropdown
 function populateTimezones() {
@@ -37,95 +43,93 @@ function populateTimezones() {
     });
 }
 
-// Create the time slots
-function createTimeSlots() {
-    const hoursContainer = document.querySelector('.hours');
-    const slotsContainer = document.querySelector('.slots-container');
+// Get the next occurrence of a given weekday
+function getNextWeekdayDate(weekday) {
+    const today = luxon.DateTime.now().setZone('UTC');
+    let targetDate = today;
     
-    // Create hour labels
-    for (let hour = 0; hour < 24; hour++) {
-        const hourSlot = document.createElement('div');
-        hourSlot.className = 'hour-slot';
-        hourSlot.textContent = `${hour.toString().padStart(2, '0')}:00`;
-        hoursContainer.appendChild(hourSlot);
+    // Adjust the date to the next occurrence of the weekday
+    while (targetDate.weekday !== weekday) {
+        targetDate = targetDate.plus({ days: 1 });
     }
+    
+    return targetDate;
+}
 
-    // Create slots for each day
-    for (let day = 0; day < 7; day++) {
-        const dayColumn = document.createElement('div');
-        dayColumn.className = 'day-column';
-        
-        for (let hour = 0; hour < 24; hour++) {
-            for (let quarter = 0; quarter < 4; quarter++) {
-                const quarterSlot = document.createElement('div');
-                quarterSlot.className = 'quarter-hour';
-                quarterSlot.dataset.day = day;
-                quarterSlot.dataset.hour = hour;
-                quarterSlot.dataset.quarter = quarter;
-                dayColumn.appendChild(quarterSlot);
-            }
-        }
-        
-        slotsContainer.appendChild(dayColumn);
+function getDurationString(startHour, startMinute, endHour, endMinute) {
+    const start = startHour * 60 + startMinute;
+    const end = endHour * 60 + endMinute;
+    const durationMinutes = end - start;
+    
+    if (durationMinutes === 60) {
+        return "1 hour";
+    } else if (durationMinutes < 60) {
+        return `${durationMinutes} minutes`;
+    } else {
+        const hours = Math.floor(durationMinutes / 60);
+        const minutes = durationMinutes % 60;
+        return minutes > 0 ? `${hours} hours ${minutes} minutes` : `${hours} hours`;
     }
 }
 
 // Convert time and display sessions
 function displaySessions() {
-    const selectedZone = document.getElementById('timezone').value;
-    const slotsContainer = document.querySelector('.slots-container');
+    const sessionsTableBody = document.getElementById('sessionsTableBody');
+    const userTimezone = document.getElementById('timezone').value;
     
     // Clear existing sessions
-    const existingSessions = document.querySelectorAll('.session');
-    existingSessions.forEach(session => session.remove());
+    sessionsTableBody.innerHTML = '';
+    
+    // Sort sessions by weekday and time
+    const sortedSessions = [...pairCodingSessions].sort((a, b) => {
+        if (a.weekday !== b.weekday) {
+            return a.weekday - b.weekday;
+        }
+        return (a.startHour * 60 + a.startMinute) - (b.startHour * 60 + b.startMinute);
+    });
 
-    pairCodingSessions.forEach(session => {
-        const fromDateTime = DateTime.fromISO(session.fromTime).setZone(selectedZone);
-        const toDateTime = DateTime.fromISO(session.toTime).setZone(selectedZone);
+    // Display each session
+    sortedSessions.forEach(session => {
+        const row = document.createElement('tr');
         
-        // Calculate position and size
-        const dayIndex = fromDateTime.weekday - 1; // 1 = Monday, 7 = Sunday
-        const startMinutes = fromDateTime.hour * 60 + fromDateTime.minute;
-        const duration = toDateTime.diff(fromDateTime, 'minutes').minutes;
+        // Get next occurrence of the session's weekday
+        const nextDate = getNextWeekdayDate(session.weekday);
         
-        const sessionElement = document.createElement('div');
-        sessionElement.className = 'session';
-        sessionElement.innerHTML = `
-            <div class="host-name">${session.host}</div>
-            <div class="session-time">
-                ${fromDateTime.toFormat('HH:mm')} - ${toDateTime.toFormat('HH:mm')}
-            </div>
-        `;
-
-        // Create session details for modal
-        sessionElement.addEventListener('click', () => {
-            const modalBody = document.getElementById('sessionModalBody');
-            modalBody.innerHTML = `
-                <div class="session-details">
-                    <p><strong>Host:</strong> ${session.host}</p>
-                    <p><strong>Day:</strong> ${fromDateTime.toFormat('cccc')}</p>
-                    <p><strong>Time:</strong> ${fromDateTime.toFormat('HH:mm')} - ${toDateTime.toFormat('HH:mm')}</p>
-                    <p><strong>Note:</strong> This is a recurring availability. Please contact the host on Discord to arrange a specific date.</p>
-                </div>
-            `;
-            const modal = new bootstrap.Modal(document.getElementById('sessionModal'));
-            modal.show();
+        // Create DateTime objects for start and end times
+        const sessionStart = nextDate.set({
+            hour: session.startHour,
+            minute: session.startMinute
         });
-
-        // Position the session element
-        sessionElement.style.left = `${(dayIndex / 7) * 100}%`;
-        sessionElement.style.width = `${100/7}%`;
-        sessionElement.style.top = `${(startMinutes / (24 * 60)) * 100}%`;
-        sessionElement.style.height = `${(duration / (24 * 60)) * 100}%`;
         
-        slotsContainer.appendChild(sessionElement);
+        // Convert to user's timezone
+        const localSessionStart = sessionStart.setZone(userTimezone);
+        
+        // Format the time range
+        const timeStr = `${localSessionStart.toFormat('HH:mm')}`;
+        const duration = getDurationString(
+            session.startHour,
+            session.startMinute,
+            session.endHour,
+            session.endMinute
+        );
+        
+        // Get weekday name
+        const dayName = localSessionStart.toFormat('cccc');
+        
+        row.innerHTML = `
+            <td>${session.host}</td>
+            <td>${dayName}</td>
+            <td>${timeStr}</td>
+            <td>${duration}</td>
+        `;
+        
+        sessionsTableBody.appendChild(row);
     });
 }
 
 // Initialize the calendar
 function initCalendar() {
     populateTimezones();
-    createTimeSlots();
     displaySessions();
     
     // Add event listener for timezone changes

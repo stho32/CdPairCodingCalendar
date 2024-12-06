@@ -18,25 +18,21 @@
             </div>
         </header>
         <div class="info-text">
-            <p>In this calendar, people publish times when they are typically available for pair coding sessions. You can reach out to them directly in the Discord channel to arrange a specific date. While these times are not guaranteed, they serve as a guide to help connect people who are interested in pair programming together.</p>
+            <p>In this overview, people publish times when they are typically available for pair coding sessions. You can reach out to them directly in the Discord channel to arrange a specific date. While these times are not guaranteed, they serve as a guide to help connect people who are interested in pair programming together.</p>
         </div>
-        <div class="calendar">
-            <div class="time-column">
-                <div class="hour-header">Hour</div>
-                <div class="hours"></div>
-            </div>
-            <div class="days-container">
-                <div class="days-header">
-                    <div>Monday</div>
-                    <div>Tuesday</div>
-                    <div>Wednesday</div>
-                    <div>Thursday</div>
-                    <div>Friday</div>
-                    <div>Saturday</div>
-                    <div>Sunday</div>
-                </div>
-                <div class="slots-container"></div>
-            </div>
+        <div class="sessions-table-container">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Host</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody id="sessionsTableBody">
+                </tbody>
+            </table>
         </div>
     </div>
 
