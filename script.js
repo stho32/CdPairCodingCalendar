@@ -16,7 +16,8 @@ const pairCodingSessions = [
         startMinute: 0,
         endHour: 18,
         endMinute: 0,
-        timezone: "UTC"
+        timezone: "UTC",
+        bookingLink: "https://calendar.app.google/gVLfmUvBHFqQmjQ48"
     },
     {
         host: "Stefan H.",
@@ -25,7 +26,8 @@ const pairCodingSessions = [
         startMinute: 0,
         endHour: 18,
         endMinute: 0,
-        timezone: "UTC"
+        timezone: "UTC",
+        bookingLink: "https://calendar.app.google/gVLfmUvBHFqQmjQ48"
     },
     {
         host: "Steven Borrie",
@@ -163,6 +165,7 @@ function displaySessions() {
             <td>${dayName}</td>
             <td>${timeStr}</td>
             <td>${duration}</td>
+            <td>${session.bookingLink ? `<a href="${session.bookingLink}" target="_blank">Book Session</a>` : ''}</td>
         `;
         
         sessionsTableBody.appendChild(row);
