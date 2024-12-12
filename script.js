@@ -1,12 +1,22 @@
 // Sample pair coding sessions
 const pairCodingSessions = [
     {
+        host: "Bernard",
+        weekday: 4, // Thursday
+        startHour: 14, // 2:30 PM UTC
+        startMinute: 30,
+        endHour: 15, // 3:30 PM UTC
+        endMinute: 30,
+        timezone: "UTC"
+    },
+    {
         host: "Stefan H.",
         weekday: 6, // Saturday
         startHour: 16,
         startMinute: 0,
         endHour: 18,
-        endMinute: 0
+        endMinute: 0,
+        timezone: "UTC"
     },
     {
         host: "Stefan H.",
@@ -14,7 +24,8 @@ const pairCodingSessions = [
         startHour: 16,
         startMinute: 0,
         endHour: 18,
-        endMinute: 0
+        endMinute: 0,
+        timezone: "UTC"
     },
     {
         host: "Steven Borrie",
@@ -22,7 +33,8 @@ const pairCodingSessions = [
         startHour: 9,
         startMinute: 30,
         endHour: 10,
-        endMinute: 30
+        endMinute: 30,
+        timezone: "UTC"
     }
 ];
 
